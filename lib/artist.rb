@@ -1,24 +1,17 @@
 class Artist
   attr_accessor :name
-  @@all = []
+  attr_reader :songs
   def initialize(name)
     @name=name
-    self.save
-  end
-  def self.all
-    @@all.dup.freeze
-  end
-  def save
-    @@all<<self
+    @songs=[]
   end
   def add_song(song)
-    raise AssociationTypeMismatchError,"#{song.class} received, Song expected." if !song.is_a?(Song)
+    self.songs<<song
     song.artist=self
   end
-  def songs
-    Song.all.select{|song| song.artist==self}
-  end
   def genres
-    songs.collect{|song| song.genre}
+    self.songs.collect do |song|
+      song.genre
+    end
   end
 end
